@@ -2195,7 +2195,7 @@ div.wpcf7-response-output {
     z-index: 2;
     display: block;
     overflow: auto;
-    height: calc(100vh - var(--main-header-height-md));
+
 }
 
 .js .main-header__nav--is-visible::after {

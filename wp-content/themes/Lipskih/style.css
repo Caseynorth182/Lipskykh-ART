@@ -8,6 +8,20 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: template-for friend
 */
 
+/*//HEADER MENU(MOBILE)*/
+.js .main-header__nav--is-visible {
+    z-index: 2;
+    display: block;
+    overflow: auto;
+
+
+}
+.main-header__logo--text{
+    font-family: 'Mr De Haviland', cursive;
+    font-size: 25px;
+    color: white !important;
+}
+
 .slide-image img{
     object-fit: fill !important;
 }
@@ -27,9 +41,12 @@ Tags: template-for friend
     padding-top: 70px !important;
 }
 
-/* .media-wrapper img{
+ .work-card__img img{
+    object-fit: cover !important;
+}
+.post_feautured.media-wrapper img {
     object-fit: contain !important;
-}*/
+}
 .text-component__inner.js-sticky-sharebar-target{
     padding: 0 15px;
 }
