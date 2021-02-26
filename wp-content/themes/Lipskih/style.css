@@ -1,0 +1,35 @@
+@charset "UTF-8";
+
+/*
+Theme Name: Lipskykh-ART
+Author: Alexander Baranov
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: template-for friend
+*/
+
+.slide-image img{
+    object-fit: fill !important;
+}
+
+.btn.btn--subtle.main-header__nav-trigger.js-main-header__nav-trigger {
+    color: black;
+}
+.main-header__nav-trigger{
+    padding: 5px !important;
+}
+
+.main-header__logo img{
+    height: 58px !important;
+}
+/*//single*/
+.text-component__block--meta{
+    padding-top: 70px !important;
+}
+
+/* .media-wrapper img{
+    object-fit: contain !important;
+}*/
+.text-component__inner.js-sticky-sharebar-target{
+    padding: 0 15px;
+}
