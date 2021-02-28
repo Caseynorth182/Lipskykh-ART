@@ -37,6 +37,14 @@ Tags: template-for friend
     height: 58px !important;
 }
 /*//single*/
+.post-nav-block{
+    margin: 0 auto;
+    padding: 15px 0;
+    width: 85%;
+    display: flex;
+    justify-content: space-between;
+}
+
 .text-component__block--meta{
     padding-top: 70px !important;
 }

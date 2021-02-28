@@ -92,7 +92,7 @@ function art_register_post(){
 
         'hierarchical'        => false,
         //NOTE специальные ярлыки, что можно редактировать в этой записи
-        'supports'            => ['title', 'editor','thumbnail','excerpt'],
+        'supports'            => ['title','thumbnail','excerpt'],
         //NOTE Старница на которой будт выведены все типы записей, Fasle-не регестрирует тип записи/ true - регестрируем
         //ANCHOR по этому URL можно получить все записи этого типа
         'has_archive' => false
