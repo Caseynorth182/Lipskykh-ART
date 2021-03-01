@@ -1,9 +1,20 @@
 <?php
+ $widgets = [
+     'widget-text.php',
+     'widget-social-links.php',
+     'widgets.php'
+ ];
+ foreach ($widgets as $widget){
+     require_once( get_template_directory() . '/widgets/' . $widget );
+ }
 require_once( get_template_directory() . '/foo-inc/register-post-types.php' );
+
 
 
 add_action('wp_enqueue_scripts','art_scripts');
 add_action('after_setup_theme', 'art_setup');
+add_action( 'widgets_init', 'register_Art_widgets' );
+
 
 
 
@@ -22,14 +33,21 @@ function art_scripts(){
     wp_register_script( 'jquery-core', '//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js');
     wp_enqueue_script( 'jquery' );
 
-    wp_enqueue_script('app', get_template_directory_uri(  ) . '/assets/assets/js/app.js', ['jquery'], '1.1' , true);
-    wp_enqueue_script('util', get_template_directory_uri(  ) . '/assets/assets/js/util.js', ['jquery'], '1.1' , true);
-    wp_enqueue_script('fslightbox', get_template_directory_uri(  ) . '/assets/assets/js/vendor/fslightbox.js', ['jquery'], '1.1' , true);
-    wp_enqueue_script('gsap.min', get_template_directory_uri(  ) . '/assets/assets/js/vendor/gsap.min.js', ['jquery'], '1.1' , true);
-    wp_enqueue_script('imagesLoaded.min', get_template_directory_uri(  ) . '/assets/assets/js/vendor/imagesLoaded.min.js', ['jquery'], '1.1' , true);
-    wp_enqueue_script('isotope.pkgd.min', get_template_directory_uri(  ) . '/assets/assets/js/vendor/isotope.pkgd.min.js', ['jquery'], '1.1' , true);
-    wp_enqueue_script('modernizr', get_template_directory_uri(  ) . '/assets/assets/js/vendor/modernizr.js', ['jquery'], '1.1' , true);
-    wp_enqueue_script('swiper.min', get_template_directory_uri(  ) . '/assets/assets/js/vendor/swiper.min.js', ['jquery'], '1.1' , true);
+    $scripts = [
+       'app'              => '/assets/assets/js/app.js',
+       'util'             => '/assets/assets/js/util.js',
+       'fslightbox'       => '/assets/assets/js/vendor/fslightbox.js',
+       'gsap.min'         => '/assets/assets/js/vendor/gsap.min.js',
+       'imagesLoaded.min' => '/assets/assets/js/vendor/imagesLoaded.min.js',
+       'isotope.pkgd.min' => '/assets/assets/js/vendor/isotope.pkgd.min.js',
+       'modernizr'        => '/assets/assets/js/vendor/modernizr.js',
+       'swiper.min'       => '/assets/assets/js/vendor/swiper.min.js',
+    ];
+    foreach($scripts as $script_name => $script_src){
+        wp_enqueue_script($script_name, get_template_directory_uri(  ) . $script_src, ['jquery'], '1.1' , true);
+    }
+
+
 }
 //админ панель
 add_filter('show_admin_bar', '__return_false'); // отключить
@@ -41,3 +59,25 @@ function art_setup(){
     add_theme_support('post-thumbnails');
     register_nav_menu( 'menu_header', 'меню в шапке' );
 }
+
+function register_Art_widgets(){
+
+    register_sidebar([
+        'name'          => 'COPYRIGHT в подвале сайта',
+        'id'            => 'art_footer',
+        'before_widget' => null,
+        'after_widget'  => null,
+    ]);
+
+    register_sidebar([
+        'name'          => 'блок социальных сетей в подвале сайта',
+        'id'            => 'art_footer_social',
+        'before_widget' => null,
+        'after_widget'  => null,
+    ]);
+
+
+}
+
+
+
