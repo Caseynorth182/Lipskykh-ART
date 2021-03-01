@@ -75,9 +75,25 @@ function register_Art_widgets(){
         'before_widget' => null,
         'after_widget'  => null,
     ]);
-
-
 }
 
+function PostNumbers() {
+    global $wpdb;
+    $querystr = "SELECT $wpdb->posts.* FROM $wpdb->posts WHERE $wpdb->posts.post_status = 'publish' AND $wpdb->posts.post_type = 'post' ";
+    $pageposts = $wpdb->get_results($querystr, OBJECT);
+    $counts = 0 ;
+    if ($pageposts):
+        foreach ($pageposts as $post):
+            setup_postdata($post);
+            $counts++;
+            add_post_meta($post->ID, 'incr_number', $counts, true);
+            update_post_meta($post->ID, 'incr_number', $counts);
+        endforeach;
+    endif;
+}
+
+add_action ( 'publish_post', 'PostNumbers' );
+add_action ( 'deleted_post', 'PostNumbers' );
+add_action ( 'edit_post', 'PostNumbers' );
 
 
