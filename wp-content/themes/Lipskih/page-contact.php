@@ -31,63 +31,60 @@ get_header();
 				<p class="text-sm"><a href="tel:http://+4473566487">+44 7356
 						6487</a><br><small class="color-contrast-medium">Mon - Fri, 8AM - 7PM</small></p>
 			</div>
-
+				<button class="push_me">Push MEEE</button>
 		</div>
 		<!--Contact Form-->
 		<div class="col-md-6 col-lg-6 pb-lg-5 contact__form pb-lg-5">
-			<div class="row">
-				<div class="form-group col-6">
-					<input class="form-control"
-					       type="text"
-					       name="your-name"
-					       aria-required="true"
-					       aria-invalid="false"
-					       placeholder="Your name">
+			<form id="add_feedback">
+				<div class="add_feedback_top">
+					<input type="text" name="art_name" id="art_name" class="required art_name" placeholder="Ваше имя" value=""/>
+
+					<input type="email" name="art_email" id="art_email" class="required art_email" placeholder="Ваш E-Mail" value=""/>
 				</div>
-				<div class="form-group col-6">
-					<input class="form-control"
-					       type="email"
-					       name="your-email"
-					       aria-required="true"
-					       aria-invalid="false"
-					       placeholder="Your email">
-				</div>
-				<div class="form-group col-12">
-					<input class="form-control"
-					       type="text"
-					       name="your-subject"
-					       aria-required="true"
-					       aria-invalid="false"
-					       placeholder="Your subject">
-				</div>
-				<div class="form-group col-12">
-                        <textarea class="form-control"
-                                  name="your-message"
-                                  cols="40"
-                                  rows="8"
-                                  aria-required="true"
-                                  aria-invalid="false"
-                                  placeholder="Write your message here..."></textarea>
-				</div>
-				<div class="form-group col-12 custom-checkbox"><span class="wpcf7-form-control-wrap your-consent"><span class="wpcf7-form-control wpcf7-acceptance"><span class="wpcf7-list-item">
-                        <label>
-                          <input class="checkbox checkbox--bg"
-                                 type="checkbox"
-                                 name="your-consent"
-                                 value="1"
-                                 aria-invalid="false"><span class="wpcf7-list-item-label">I consent to the conditions.</span>
-                        </label></span></span></span></div>
-				<div class="conditions-checkbox__control col-12"
-				     aria-hidden="true">
-					<input class="btn btn--primary"
-					       type="submit"
-					       value="Send"
-					       disabled=""><span class="ajax-loader"></span>
-				</div>
-			</div>
+
+				<input type="text" name="art_subject" id="art_subject" class="art_subject" placeholder="Тема сообщения" value=""/>
+
+				<textarea name="art_comments" id="art_comments" placeholder="Сообщение" rows="10" cols="30" class="required art_comments"></textarea>
+
+				<input type="checkbox" name="art_anticheck" id="art_anticheck" class="art_anticheck" style="display: none !important;" value="true" checked="checked"/>
+
+				<input type="text" name="art_submitted" id="art_submitted" value="" style="display: none !important;"/>
+
+				<input type="submit" id="submit-feedback" class="button" value="Отправить сообщение"/>
+			</form>
 		</div>
+
+		<script>
+			var a = toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+            $('.push_me').on('click', function () {
+
+                toastr["success"]("My name is Inigo Montoya. You killed my father. Prepare to die!", "Очень сильно крутая! ")
+            })
+		</script>
 	</div>
 </div>
+
+
+
+
+
+
 <!--Footer--><a class="back-to-top js-back-to-top back-to-top--is-visible"
                 data-offset="500"
                 data-duration="300">

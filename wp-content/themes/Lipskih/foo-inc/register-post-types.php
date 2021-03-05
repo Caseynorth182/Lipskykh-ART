@@ -147,5 +147,39 @@ function art_register_post(){
         'public'                => true,
         'hierarchical'          => true
     ]);
+
+    //типы записей для ФОРМЫ
+    register_post_type('mail', [
+        /*  //ANCHOR Настройки, можно копировать в другие проекты */
+        //NOTE имя склоняемое
+        'labels' => [
+            'name'               => 'Письма', // основное название для типа записи
+            'singular_name'      => 'Письмо', // название для одной записи этого типа
+            'add_new'            => 'Добавить новое Письмо', // для добавления новой записи
+            'add_new_item'       => 'Добавить новое Письмо', // заголовка у вновь создаваемой записи в админ-панели.
+            'edit_item'          => 'Редактировать Письмо', // для редактирования типа записи
+            'new_item'           => 'Новое Письмо', // текст новой записи
+            'view_item'          => 'Смотреть Письмо', // для просмотра записи этого типа.
+            'search_items'       => 'Искать Письмо', // для поиска по этим типам записи
+            'not_found'          => 'Не найдено', // если в результате поиска ничего не было найдено
+            'not_found_in_trash' => 'Не найдено в корзине', // если не было найдено в корзине
+            'parent_item_colon'  => '', // для родителей (у древовидных типов)
+            'menu_name'          => 'Письма', // название меню
+        ],
+
+        "public" => true,
+        "show_ui" => true,
+        "has_archive" => false,
+        "show_in_menu" => true,
+        "exclude_from_search" => true,
+        "capability_type" => "post",
+        "map_meta_cap" => true,
+        "hierarchical" => true,
+        "rewrite" => false,
+        "query_var" => true,
+        "menu_position" => 7,
+        "menu_icon" => "dashicons-email-alt",
+        "supports" => array( "title", "editor" ),
+    ]);
 }
 

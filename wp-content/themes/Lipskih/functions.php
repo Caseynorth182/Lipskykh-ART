@@ -8,12 +8,16 @@
      require_once( get_template_directory() . '/widgets/' . $widget );
  }
 require_once( get_template_directory() . '/foo-inc/register-post-types.php' );
+require_once( get_template_directory() . '/foo-inc/custom-ajax-mail.php' );
 
 
 
 add_action('wp_enqueue_scripts','art_scripts');
 add_action('after_setup_theme', 'art_setup');
 add_action( 'widgets_init', 'register_Art_widgets' );
+add_action('admin_post_nopriv_art_form','art_form_handler');
+add_action('admin_post_art_form','art_form_handler');
+
 
 
 
@@ -27,6 +31,7 @@ function art_scripts(){
     wp_enqueue_style('magnific-popup', get_template_directory_uri(  ) . '/assets/assets/css/vendor/magnific-popup.css' , [], '1.0' , 'all');
     wp_enqueue_style('socicon', get_template_directory_uri(  ) . '/assets/assets/css/vendor/socicon.css' , [], '1.0' , 'all');
     wp_enqueue_style('swiper.min', get_template_directory_uri(  ) . '/assets/assets/css/vendor/swiper.min.css' , [], '1.0' , 'all');
+    wp_enqueue_style('toatsr.min', get_template_directory_uri(  ) .'/assets/assets/css/vendor/toastr.css' , [], '1.0' , 'all');
 
     //SCRIPTS
     wp_deregister_script( 'jquery-core' );
@@ -42,11 +47,26 @@ function art_scripts(){
        'isotope.pkgd.min' => '/assets/assets/js/vendor/isotope.pkgd.min.js',
        'modernizr'        => '/assets/assets/js/vendor/modernizr.js',
        'swiper.min'       => '/assets/assets/js/vendor/swiper.min.js',
+       'feedback'         => '/assets/assets/js/feedback.js',
+       'toastr'         => '/assets/assets/js/toastr.min.js',
     ];
     foreach($scripts as $script_name => $script_src){
         wp_enqueue_script($script_name, get_template_directory_uri(  ) . $script_src, ['jquery'], '1.1' , true);
     }
 
+
+    // Обрабтка полей формы
+    wp_enqueue_script( 'jquery-form' );
+
+    // Задаем данные обьекта ajax
+    wp_localize_script(
+        'feedback',
+        'feedback_object',
+        [
+            'url'   => admin_url( 'admin-ajax.php' ),
+            'nonce' => wp_create_nonce( 'feedback-nonce' ),
+        ]
+    );
 
 }
 //админ панель
@@ -77,23 +97,10 @@ function register_Art_widgets(){
     ]);
 }
 
-function PostNumbers() {
-    global $wpdb;
-    $querystr = "SELECT $wpdb->posts.* FROM $wpdb->posts WHERE $wpdb->posts.post_status = 'publish' AND $wpdb->posts.post_type = 'post' ";
-    $pageposts = $wpdb->get_results($querystr, OBJECT);
-    $counts = 0 ;
-    if ($pageposts):
-        foreach ($pageposts as $post):
-            setup_postdata($post);
-            $counts++;
-            add_post_meta($post->ID, 'incr_number', $counts, true);
-            update_post_meta($post->ID, 'incr_number', $counts);
-        endforeach;
-    endif;
-}
 
-add_action ( 'publish_post', 'PostNumbers' );
-add_action ( 'deleted_post', 'PostNumbers' );
-add_action ( 'edit_post', 'PostNumbers' );
+
+
+
+
 
 

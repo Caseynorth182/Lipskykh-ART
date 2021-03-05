@@ -32,6 +32,11 @@ get_header();
 				<?php the_excerpt();?>
 			</p>
 		</blockquote>
+		<p>
+			<a href="<?php the_field('link');?>"
+			   class="post_link">buy this picture &#9658;</a>
+		</p>
+
 
 		<div class="clearfix"></div>
 	</div>

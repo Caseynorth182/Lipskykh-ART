@@ -11,10 +11,10 @@ get_header();
 </header>
 		<div class="post-nav-block">
 			<div class="post-nav__item"><? echo get_previous_post_link('%link', '&lArr; Предедущее фото'); ?></div>
-			<div class="post-nav__item"><? echo get_next_post_link('%link', 'Следующее &rArr;'); ?></div>
+			<div class="post-nav__item"><? echo get_next_post_link('%link', 'Следующее фото &rArr;'); ?></div>
 		</div>
 <!--Post Feautured image-->
-<figure class="post_feautured media-wrapper media-wrapper--4:3">
+<figure class="post_feautured media-wrapper album">
    <?php the_post_thumbnail();?>
 </figure>
 <div class="margin-bottom-lg"></div>
@@ -30,6 +30,8 @@ get_header();
 				<?php the_excerpt();?>
 			</p>
 		</blockquote>
+
+
 
 		<div class="clearfix"></div>
 	</div>

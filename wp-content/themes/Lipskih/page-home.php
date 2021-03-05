@@ -40,9 +40,11 @@ get_header();
                                 </span>
                             </div>
                             <div class="slide-title">
-                                <div class="slide-cat">trend</div>
-                                <h3>legacy of rainbow</h3>
-                                <a class="slide-link" rel="noreferrer" href="portfolio_3.html">Перейти<span></span></a>
+                                <div class="slide-cat"><?php the_field('slide_name');?></div>
+                                <h3><?php the_field('slide_subname');?>
+	                                <br><?php the_field('slide_subname2');?>
+                                </h3>
+                                <a class="slide-link" rel="noreferrer" href="<?php the_field('slide_link');?>">Перейти<span></span></a>
                             </div>
                         </div>
                     </div>
