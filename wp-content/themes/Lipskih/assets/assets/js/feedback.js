@@ -1,88 +1,101 @@
-jQuery(document).ready(function ($) {
-    var add_form = $('#add_feedback');
+jQuery(document).ready(function($){
 
-    // Сброс значений полей
-    $('#add_feedback input, #add_feedback textarea').on('blur', function () {
-        $('#add_feedback input, #add_feedback textarea').removeClass('error');
-        $('.error-name,.error-email,.error-comments,.message-success').remove();
-        $('#submit-feedback').val('Отправить сообщение');
+    var form = $('.form-send-mail'),
+        action = form.attr('action'),
+        pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
+
+    form.find('.req-field').addClass('empty-field');
+
+    function checkInput() {
+        form.find('.req-field').each(function () {
+            var el = $(this);
+            if (el.hasClass('rf-mail')) {
+                if (pattern.test(el.val())) {
+                    el.removeClass('empty-field');
+                } else {
+                    el.addClass('empty-field');
+                }
+            } else if (el.val() != '') {
+                el.removeClass('empty-field');
+            } else {
+                el.addClass('empty-field');
+            }
+        });
+    }
+
+    function lightEmpty() {
+        form.find('.empty-field').addClass('rf-error');
+        setTimeout(function () {
+            form.find('.rf-error').removeClass('rf-error');
+        }, 1000);
+    }
+
+    $(document).on('submit', '.form-send-mail', function (e) {
+        var formData = {
+            client_fio: $('#client_fio').prop('value'),
+            client_mail: $('#client_mail').prop('value'),
+            client_quest: $('#client_quest').prop('value')
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: action,
+            data: formData,
+            beforeSend: function () {
+                form.addClass('is-sending');
+            },
+            error: function (request, txtstatus, errorThrown) {
+                console.log(request);
+                console.log(txtstatus);
+                console.log(errorThrown);
+            },
+            success: function () {
+                form.removeClass('is-sending').addClass('is-sending-complete');
+            }
+        });
+
+        e.preventDefault();
+
     });
 
-    // Отправка значений полей
-    var options = {
-        url: feedback_object.url,
-        data: {
-            action: 'feedback_action',
-            nonce: feedback_object.nonce
-        },
-        type: 'POST',
-        dataType: 'json',
-        beforeSubmit: function (xhr) {
-            // При отправке формы меняем надпись на кнопке
-            $('#submit-feedback').val('Отправляем...');
-        },
-        success: function (request, xhr, status, error) {
+    $(document).on('click', '.form-send-mail button[type="submit"]', function (e) {
 
+        checkInput();
 
-            if (request.success === true) {
-                // Если все поля заполнены, отправляем данные и меняем надпись на кнопке
-                toastr["success"]("Я скоро с вами свяжусь", "Письмо отправлено")
+        var errorNum = form.find('.empty-field').length;
 
-            } else {
-                // Если поля не заполнены, выводим сообщения и меняем надпись на кнопке
-                $.each(request.data, function (key, val) {
-                    $('.art_' + key).addClass('error');
-                    $('.art_' + key).before('<span class="error-' + key + '">' + val + '</span>');
-                });
-                $('#submit-feedback').val('Что-то пошло не так...');
-                toastr["error"]("что-то пошло не так", "ой")
-
-            }
-            // При успешной отправке сбрасываем значения полей
-            $('#add_feedback')[0].reset();
-
-        },
-        error: function (request, status, error) {
-            $('#submit-feedback').val('Что-то пошло не так...');
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": false,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-
+        if (errorNum > 0) {
+            lightEmpty();
+            e.preventDefault();
         }
-    };
-    // Отправка формы
-    add_form.ajaxForm(options);
 
-    //toastr
-    toastr.options = {
-        "closeButton": false,
-        "debug": false,
-        "newestOnTop": false,
-        "progressBar": false,
-        "positionClass": "toast-top-right",
-        "preventDuplicates": false,
-        "onclick": null,
-        "showDuration": "300",
-        "hideDuration": "1000",
-        "timeOut": "5000",
-        "extendedTimeOut": "1000",
-        "showEasing": "swing",
-        "hideEasing": "linear",
-        "showMethod": "fadeIn",
-        "hideMethod": "fadeOut"
-    }
+    });
+
+    $(document).on('click', '.form-is-more button', function () {
+
+        form.find('input').val('');
+
+        form.find('textarea').val('');
+
+        form.removeClass('is-sending-complete');
+
+    });
+
 });
+toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+}

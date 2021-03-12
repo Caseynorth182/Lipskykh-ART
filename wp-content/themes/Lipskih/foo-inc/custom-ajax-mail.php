@@ -1,85 +1,34 @@
 <?php
-add_action( 'wp_ajax_feedback_action', 'ajax_action_callback' );
-add_action( 'wp_ajax_nopriv_feedback_action', 'ajax_action_callback' );
-/**
- * Обработка скрипта
- *
- * @see https://wpruse.ru/?p=3224
- */
-function ajax_action_callback() {
+function send_mail() {
 
-    // Массив ошибок
-    $err_message = array();
+/* Забираем отправленные данные */
+$client_fio = $_POST['client_fio'];
+$client_mail = $_POST['client_mail'];
+$client_quest = $_POST['client_quest'];
 
-    // Проверяем nonce. Если проверкане прошла, то блокируем отправку
-    if ( ! wp_verify_nonce( $_POST['nonce'], 'feedback-nonce' ) ) {
-        wp_die( 'Данные отправлены с левого адреса' );
-    }
+/* Отправляем нам письмо */
+$emailTo = 'admin@test.com';
+$subject = 'Test mail рассылки!';
+$headers = "Content-type: text/html; charset=\"utf-8\"";
+$mailBody = "$client_fio <br/><br/> $client_mail <br/><br/> $client_quest";
 
-    // Проверяем на спам. Если скрытое поле заполнено или снят чек, то блокируем отправку
-    if ( false === $_POST['art_anticheck'] || ! empty( $_POST['art_submitted'] ) ) {
-        wp_die( 'Пошел нахрен, мальчик!(c)' );
-    }
+wp_mail($emailTo, $subject, $mailBody, $headers);
 
-    // Проверяем полей имени, если пустое, то пишем сообщение в массив ошибок
-    if ( empty( $_POST['art_name'] ) || ! isset( $_POST['art_name'] ) ) {
-        $err_message['name'] = 'Пожалуйста, введите ваше имя.';
-    } else {
-        $art_name = sanitize_text_field( $_POST['art_name'] );
-    }
+/* Создаем новый пост-письмо */
+$post_data = array(
+'post_title'    => $client_fio,
+'post_content'  => $client_quest . '<br/>' .$client_mail,
+'post_status'   => 'publish',
+'post_author'   => 1,
+'post_type' => 'mail',
+);
 
-    // Проверяем полей емайла, если пустое, то пишем сообщение в массив ошибок
-    if ( empty( $_POST['art_email'] ) || ! isset( $_POST['art_email'] ) ) {
-        $err_message['email'] = 'Пожалуйста, введите адрес вашей электронной почты.';
-    } elseif ( ! preg_match( '/^[[:alnum:]][a-z0-9_.-]*@[a-z0-9.-]+\.[a-z]{2,4}$/i', $_POST['art_email'] ) ) {
-        $err_message['email'] = 'Адрес электронной почты некорректный.';
-    } else {
-        $art_email = sanitize_email( $_POST['art_email'] );
+wp_insert_post( $post_data );
 
-    }
-    // Проверяем полей темы письма, если пустое, то пишем сообщение по умолчанию
-    if ( empty( $_POST['art_subject'] ) || ! isset( $_POST['art_subject'] ) ) {
-        $art_subject = 'Сообщение с сайта';
-    } else {
-        $art_subject = sanitize_text_field( $_POST['art_subject'] );
-    }
-
-    // Проверяем полей сообщения, если пустое, то пишем сообщение в массив ошибок
-    if ( empty( $_POST['art_comments'] ) || ! isset( $_POST['art_comments'] ) ) {
-        $err_message['comments'] = 'Пожалуйста, введите ваше сообщение.';
-    } else {
-        $art_comments = sanitize_textarea_field( $_POST['art_comments'] );
-    }
-
-    // Проверяем массив ошибок, если не пустой, то передаем сообщение. Иначе отправляем письмо
-    if ( $err_message ) {
-
-        wp_send_json_error( $err_message );
-
-    } else {
-
-        // Указываем адресата
-        $email_to = '';
-
-        // Если адресат не указан, то берем данные из настроек сайта
-        if ( ! $email_to ) {
-            $email_to = get_option( 'admin_email' );
-            /*$email_to = 'caseynorth182@gmail.com';*/
-
-        }
-
-        $body    = "Имя: $art_name \nEmail: $art_email \n\nСообщение: $art_comments";
-        $headers = 'From: ' . $art_name . ' <' . $email_to . '>' . "\r\n" . 'Reply-To: ' . $email_to;
-
-        // Отправляем письмо
-        wp_mail( $email_to, $art_subject, $body, $headers );
-
-        // Отправляем сообщение об успешной отправке
-        $message_success = 'Собщение отправлено. В ближайшее время я свяжусь с вами.';
-        wp_send_json_success( $message_success );
-    }
-
-    // На всякий случай убиваем еще раз процесс ajax
-    wp_die();
+/* Завершаем выполнение ajax */
+die();
 
 }
+
+add_action("wp_ajax_send_mail", "send_mail");
+add_action("wp_ajax_nopriv_send_mail", "send_mail");

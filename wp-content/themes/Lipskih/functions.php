@@ -53,22 +53,9 @@ function art_scripts(){
     foreach($scripts as $script_name => $script_src){
         wp_enqueue_script($script_name, get_template_directory_uri(  ) . $script_src, ['jquery'], '1.1' , true);
     }
-
-
-    // Обрабтка полей формы
-    wp_enqueue_script( 'jquery-form' );
-
-    // Задаем данные обьекта ajax
-    wp_localize_script(
-        'feedback',
-        'feedback_object',
-        [
-            'url'   => admin_url( 'admin-ajax.php' ),
-            'nonce' => wp_create_nonce( 'feedback-nonce' ),
-        ]
-    );
-
 }
+
+
 //админ панель
 add_filter('show_admin_bar', '__return_false'); // отключить
 
@@ -96,6 +83,53 @@ function register_Art_widgets(){
         'after_widget'  => null,
     ]);
 }
+
+
+
+////////////////////
+add_action( 'init', 'cpt_mail_calback' );
+
+function cpt_mail_calback() {
+
+    $labels = array(
+        "name" => "Mail",
+        "singular_name" => "Mail",
+        "menu_name" => "Mail",
+        "all_items" => "All mail",
+        "add_new" => "Add New",
+        "add_new_item" => "Add New",
+        "edit" => "Edit",
+        "edit_item" => "Edit",
+        "new_item" => "New item",
+        "view" => "View",
+        "view_item" => "View item",
+        "search_items" => "Search item",
+        "not_found" => "No found",
+        "not_found_in_trash" => "No found",
+    );
+
+    $args = array(
+        "labels" => $labels,
+        "description" => "",
+        "public" => true,
+        "show_ui" => true,
+        "has_archive" => false,
+        "show_in_menu" => true,
+        "exclude_from_search" => true,
+        "capability_type" => "post",
+        "map_meta_cap" => true,
+        "hierarchical" => true,
+        "rewrite" => false,
+        "query_var" => true,
+        "menu_position" => 7,
+        "menu_icon" => "dashicons-email-alt",
+        "supports" => array( "title", "editor" ),
+    );
+
+    register_post_type( "mail", $args );
+
+}
+
 
 
 
